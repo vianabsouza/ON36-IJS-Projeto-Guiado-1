@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { AlunoModule } from './alunos/aluno.module';
+import { AlunoModule } from './alunos/application/aluno.module';
 
 @Module({
   imports: [AlunoModule],

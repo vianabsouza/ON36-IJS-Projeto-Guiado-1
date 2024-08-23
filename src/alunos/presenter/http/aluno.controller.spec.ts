@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AlunoController } from './aluno.controller';
-import { AlunoService } from './aluno.service';
-import { AlunoRepository } from './aluno.repository';
+import { AlunoService } from '../../application/aluno.service';
+import { AlunoRepository } from '../../aluno.repository';
 
 describe('AlunosController', () => {
   let controller: AlunoController;

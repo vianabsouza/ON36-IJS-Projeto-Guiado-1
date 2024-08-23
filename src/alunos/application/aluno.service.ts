@@ -1,7 +1,7 @@
 import { ConflictException, ForbiddenException, Injectable } from '@nestjs/common';
-import { CreateAlunoDto } from './dto/create-aluno.dto';
-import { AlunoRepository } from './aluno.repository';
-import { Aluno } from './entities/aluno.entity';
+import { CreateAlunoDto } from '../presenter/http/dto/create-aluno.dto';
+import { AlunoRepository } from '../aluno.repository';
+import { Aluno } from '../domain/aluno';
 
 @Injectable()
 export class AlunoService {
