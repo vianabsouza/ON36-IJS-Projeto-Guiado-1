@@ -1,5 +1,5 @@
 import { ConflictException, ForbiddenException, Injectable } from '@nestjs/common';
-import { AlunoRepository } from '../aluno.repository';
+import { AlunoRepository } from './ports/aluno.repository';
 import { Aluno } from '../domain/aluno';
 import { CreateAlunoCommand } from './commands/create-aluno-command';
 
