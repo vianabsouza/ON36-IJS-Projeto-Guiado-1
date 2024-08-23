@@ -1,13 +1,13 @@
 import { ConflictException, ForbiddenException, Injectable } from '@nestjs/common';
-import { CreateAlunoDto } from '../presenter/http/dto/create-aluno.dto';
 import { AlunoRepository } from '../aluno.repository';
 import { Aluno } from '../domain/aluno';
+import { CreateAlunoCommand } from './commands/create-aluno-command';
 
 @Injectable()
 export class AlunoService {
   constructor(private readonly alunoRepository: AlunoRepository) {}
 
-  cadastrar(createAlunoDto: CreateAlunoDto) {
+  cadastrar(createAlunoDto: CreateAlunoCommand) {
     // Pessoas a partir de 16 anos (professores e estudantes);
     const anoAtual = new Date().getFullYear();
     const idade = anoAtual - createAlunoDto.anoNascimento;
