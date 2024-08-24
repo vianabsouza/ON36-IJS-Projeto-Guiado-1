@@ -1,9 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AlunoService } from './aluno.service';
+import { CreateAlunoCommand } from './commands/create-aluno-command';
 import { ConflictException, ForbiddenException } from '@nestjs/common';
 import { Aluno } from '../domain/aluno';
-import { AlunoRepository } from '../aluno.repository';
-import { CreateAlunoCommand } from './commands/create-aluno-command';
+import { AlunoFactory } from '../domain/factories/aluno-factory';
 
 describe('AlunoService', () => {
   let service: AlunoService;
@@ -17,7 +17,7 @@ describe('AlunoService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [AlunoService, AlunoRepository],
+      providers: [AlunoService, AlunoFactory],
     }).compile();
 
     service = module.get<AlunoService>(AlunoService);
@@ -27,8 +27,8 @@ describe('AlunoService', () => {
     expect(service).toBeDefined();
   });
 
-  it('deve retornar um aluno criado para o controller', () => {
-    const alunoCriado = service.cadastrar(alunoTest);
+  it('deve retornar um aluno criado para o controller', async () => {
+    const alunoCriado = await service.cadastrar(alunoTest);
     expect(alunoCriado).toBeInstanceOf(Aluno);
     expect(alunoCriado.id).toBeDefined();
     expect(alunoCriado.nome).toBe(alunoTest.nome);

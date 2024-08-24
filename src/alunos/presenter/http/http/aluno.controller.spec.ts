@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AlunoController } from './aluno.controller';
-import { AlunoService } from '../../application/aluno.service';
+import { AlunoService } from 'src/alunos/application/aluno.service';
 
-describe('AlunosController', () => {
+describe('AlunoController', () => {
   let controller: AlunoController;
 
   beforeEach(async () => {

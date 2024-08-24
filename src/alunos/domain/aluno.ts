@@ -1,16 +1,10 @@
 export class Aluno {
-  id: string;
-  nome: string;
-  endereco: string;
-  email: string;
-  telefone: string;
-  cursos: string[];
-
-  constructor(nome: string, endereco: string, email: string, telefone: string) {
-    this.nome = nome;
-    this.endereco = endereco;
-    this.email = email;
-    this.telefone = telefone;
-    this.cursos = [];
-  }
+  constructor(
+    public id: string,
+    public nome: string,
+    public endereco: string,
+    public email: string,
+    public telefone: string,
+    public cursos: string[], // Depois podemos converter para um array de objetos Curso
+  ) {}
 }

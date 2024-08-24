@@ -1,43 +1,51 @@
-import { ConflictException, ForbiddenException, Injectable } from '@nestjs/common';
-import { AlunoRepository } from './ports/aluno.repository';
-import { Aluno } from '../domain/aluno';
+import {
+  ConflictException,
+  ForbiddenException,
+  Injectable,
+} from '@nestjs/common';
 import { CreateAlunoCommand } from './commands/create-aluno-command';
+import { AlunoRepository } from './ports/aluno.repository';
+import { AlunoFactory } from '../domain/factories/aluno-factory';
 
 @Injectable()
 export class AlunoService {
-  constructor(private readonly alunoRepository: AlunoRepository) {}
+  constructor(
+    private readonly alunoRepository: AlunoRepository,
+    private readonly alunoFactory: AlunoFactory,
+  ) {}
 
-  cadastrar(createAlunoDto: CreateAlunoCommand) {
-    // Pessoas a partir de 16 anos (professores e estudantes);
-    const anoAtual = new Date().getFullYear();
-    const idade = anoAtual - createAlunoDto.anoNascimento;
-    const IDADE_MIN_CADASTRO = 16;
-    if (idade <= IDADE_MIN_CADASTRO) {
-      throw new ForbiddenException('A idade mínima para cadastro é 16 anos.');
-    }
+  cadastrar(createAlunoCommand: CreateAlunoCommand) {
+    this.validarIdadeMinima(createAlunoCommand);
+    this.validarSeJaExiste(createAlunoCommand);
 
-    // TODO: Implentar um teste unitário para verificar essa regra
+    const novoAluno = this.alunoFactory.criar(
+      createAlunoCommand.nome,
+      createAlunoCommand.endereco,
+      createAlunoCommand.email,
+      createAlunoCommand.telefone,
+    );
 
-    // TO DO: Implementar a regra de negácio:
-    // Não pode haver duplicação de registros de alunos, cursos e professores - identificador único;
+    return this.alunoRepository.salvar(novoAluno);
+  }
+
+  private validarSeJaExiste(createAlunoCommand: CreateAlunoCommand) {
     const alunoExistente = this.alunoRepository.buscarPorEmail(
-      createAlunoDto.email,
+      createAlunoCommand.email,
     );
     if (alunoExistente) {
       throw new ConflictException(
         'Já existe um aluno cadastrado com esse email.',
       );
     }
+  }
 
-    const novoAluno = new Aluno(
-      createAlunoDto.nome,
-      createAlunoDto.endereco,
-      createAlunoDto.email,
-      createAlunoDto.telefone,
-    );
-
-    const alunoCadastrado = this.alunoRepository.criar(novoAluno);
-    return alunoCadastrado;
+  private validarIdadeMinima(createAlunoCommand: CreateAlunoCommand) {
+    const anoAtual = new Date().getFullYear();
+    const idade = anoAtual - createAlunoCommand.anoNascimento;
+    const IDADE_MIN_CADASTRO = 16;
+    if (idade <= IDADE_MIN_CADASTRO) {
+      throw new ForbiddenException('A idade mínima para cadastro é 16 anos.');
+    }
   }
 
   listar() {
